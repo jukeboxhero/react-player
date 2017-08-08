@@ -3,7 +3,7 @@ import loadScript from 'load-script'
 
 import Base from './Base'
 
-const SDK_URL = '//fast.wistia.com/assets/external/E-v1.js'
+const SDK_URL = 'https://fast.wistia.com/assets/external/E-v1.js'
 const SDK_GLOBAL = 'Wistia'
 const MATCH_URL = /^https?:\/\/(.+)?(wistia.com|wi.st)\/(medias|embed)\/(.*)$/
 
