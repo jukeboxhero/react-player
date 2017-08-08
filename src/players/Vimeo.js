@@ -1,4 +1,5 @@
 import React from 'react'
+import { findDOMNode } from 'react-dom'
 import loadScript from 'load-script'
 
 import Base from './Base'
@@ -61,7 +62,7 @@ export default class Vimeo extends Base {
       })
       this.player.on('loaded', () => {
         this.onReady()
-        const iframe = this.container.querySelector('iframe')
+        const iframe = findDOMNode(this).querySelector('iframe')
         iframe.style.width = '100%'
         iframe.style.height = '100%'
       })
@@ -92,10 +93,10 @@ export default class Vimeo extends Base {
     if (!this.isReady) return
     this.player.unload()
   }
-  seekTo (amount) {
-    const seconds = super.seekTo(amount)
+  seekTo (fraction) {
+    super.seekTo(fraction)
     if (!this.isReady || !this.player.setCurrentTime) return
-    this.player.setCurrentTime(seconds)
+    this.player.setCurrentTime(this.duration * fraction)
   }
   setVolume (fraction) {
     this.player.setVolume(fraction)

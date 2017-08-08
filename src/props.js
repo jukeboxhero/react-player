@@ -38,13 +38,9 @@ export const propTypes = {
   }),
   fileConfig: shape({
     attributes: object,
-    tracks: array,
     forceAudio: bool,
     forceHLS: bool,
     forceDASH: bool
-  }),
-  wistiaConfig: shape({
-    options: object
   }),
   onReady: func,
   onStart: func,
@@ -92,13 +88,9 @@ export const defaultProps = {
   },
   fileConfig: {
     attributes: {},
-    tracks: [],
     forceAudio: false,
     forceHLS: false,
     forceDASH: false
-  },
-  wistiaConfig: {
-    options: {}
   },
   onReady: function () {},
   onStart: function () {},

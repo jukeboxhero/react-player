@@ -3,7 +3,7 @@ import loadScript from 'load-script'
 
 import Base from './Base'
 
-const SDK_URL = 'https://fast.wistia.com/assets/external/E-v1.js'
+const SDK_URL = '//fast.wistia.com/assets/external/E-v1.js'
 const SDK_GLOBAL = 'Wistia'
 const MATCH_URL = /^https?:\/\/(.+)?(wistia.com|wi.st)\/(medias|embed)\/(.*)$/
 
@@ -13,13 +13,12 @@ export default class Wistia extends Base {
     return MATCH_URL.test(url)
   }
   componentDidMount () {
-    const { onStart, onPause, onEnded, wistiaConfig } = this.props
+    const { onStart, onPause, onEnded } = this.props
     this.loadingSDK = true
     this.getSDK().then(() => {
       window._wq = window._wq || []
       window._wq.push({
         id: this.getID(this.props.url),
-        options: wistiaConfig.options,
         onReady: player => {
           this.player = player
           this.player.bind('start', onStart)
@@ -66,10 +65,10 @@ export default class Wistia extends Base {
     if (!this.isReady || !this.player) return
     this.player.pause()
   }
-  seekTo (amount) {
-    const seconds = super.seekTo(amount)
+  seekTo (fraction) {
+    super.seekTo(fraction)
     if (!this.isReady || !this.player) return
-    this.player.time(seconds)
+    this.player.time(this.getDuration() * fraction)
   }
   setVolume (fraction) {
     if (!this.isReady || !this.player || !this.player.volume) return
@@ -85,7 +84,7 @@ export default class Wistia extends Base {
   }
   getFractionPlayed () {
     if (!this.isReady || !this.player || !this.player.percentWatched) return null
-    return this.player.time() / this.player.duration()
+    return this.player.percentWatched()
   }
   getFractionLoaded () {
     return null

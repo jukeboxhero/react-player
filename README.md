@@ -113,7 +113,6 @@ Prop | Description
 `vimeoConfig` | Configuration object for the Vimeo player.<br />Set `iframeParams` to override the [default params](https://developer.vimeo.com/player/embedding#universal-parameters).<br />Set `preload` for [preloading](#preloading).
 `youtubeConfig` | Configuration object for the YouTube player.<br />Set `playerVars` to override the [default player vars](https://developers.google.com/youtube/player_parameters?playerVersion=HTML5).<br />Set `preload` for [preloading](#preloading).
 `vidmeConfig` | Configuration object for the Vidme player.<br />Set `format` to use a certain quality of video, when available.<br />Possible values: `240p`, `480p`, `720p`, `1080p`, `dash`, `hls`
-`wistiaConfig` | Configuration object for the Wistia player.<br />Set `options` to override the [default player options](https://wistia.com/doc/embed-options#options_list)
 `dailymotionConfig` | Configuration object for the DailyMotion player.<br />Set `params` to override the [default player vars](https://developer.dailymotion.com/player#player-parameters).<br />Set `preload` for [preloading](#preloading).
 `fileConfig` | Configuration object for the file player.<br />Set `attributes` to apply [element attributes](https://developer.mozilla.org/en/docs/Web/HTML/Element/video#Attributes).<br />Set `forceAudio` to always render an `<audio>` element.<br />Set `forceHLS` to use [hls.js](https://github.com/video-dev/hls.js) for HLS streams.<br />Set `forceDASH` to always use [dash.js](https://github.com/Dash-Industry-Forum/dash.js) for DASH streams.
 `facebookConfig` | Configuration object for the Facebook player.<br />Set `appId` to your own [Facebook app ID](https://developers.facebook.com/docs/apps/register#app-id).
@@ -122,17 +121,17 @@ Prop | Description
 
 Both `youtubeConfig`, `vimeoConfig`, `dailymotionConfig` props can take a `preload` value. Setting this to `true` will play a short, silent video in the background when `ReactPlayer` first mounts. This fixes a [bug](https://github.com/CookPete/react-player/issues/7) where videos would not play when loaded in a background browser tab.
 
-#### Multiple Sources and Tracks
+#### Multiple Sources
 
 When playing file paths, an array of sources can be passed to the `url` prop to render multiple `<source>` tags.
 
-```jsx
+```js
 <ReactPlayer playing url={['foo.webm', 'foo.ogg']} />
 ```
 
 You can also specify a `type` for each source by using objects with `src` and `type` properties.
 
-```jsx
+```js
 <ReactPlayer
   playing
   url={[
@@ -142,30 +141,13 @@ You can also specify a `type` for each source by using objects with `src` and `t
 />
 ```
 
-[`<track>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track) elements for subtitles can be added using `fileConfig`:
-
-```jsx
-<ReactPlayer
-  playing
-  url='foo.webm'
-  fileConfig={{
-    tracks: [
-      {kind: 'subtitles', src: 'subs/subtitles.en.vtt', srcLang: 'en', default: true},
-      {kind: 'subtitles', src: 'subs/subtitles.ja.vtt', srcLang: 'ja'},
-      {kind: 'subtitles', src: 'subs/subtitles.de.vtt', srcLang: 'de'}
-    ]
-  }}
-/>
-```
-
-
 ### Methods
 
 Use [`ref`](https://facebook.github.io/react/docs/refs-and-the-dom.html) to call methods on the player. See [the demo app](src/demo/App.js) for an example of this.
 
 Prop | Description
 ---- | -----------
-`seekTo(amount)` | Seek to the given number of seconds, or fraction if `amount` is between `0` and `1`.
+`seekTo(fraction)` | Seek to the specified fraction (from 0 to 1) of the currently playing media
 `getCurrentTime()` | Returns the number of seconds that has been played.<br >Returns `null` if duration is unavailable.
 `getDuration()` | Returns the duration (in seconds) of the currently playing media.<br >Returns `null` if duration is unavailable.
 
@@ -180,8 +162,6 @@ Prop | Description
 * Wistia videos use the [Wistia Player API](https://wistia.com/doc/player-api)
 * DailyMotion videos use the [DailyMotion Player API](https://developer.dailymotion.com/player)
 * [Supported file types](https://github.com/CookPete/react-player/blob/master/src/players/FilePlayer.js#L5-L6) are playing using [`<video>`](https://developer.mozilla.org/en/docs/Web/HTML/Element/video) or [`<audio>`](https://developer.mozilla.org/en/docs/Web/HTML/Element/audio) elements
-  * HLS streams are played using [hls.js](https://github.com/video-dev/hls.js)
-  * DASH streams are played using [dash.js](https://github.com/Dash-Industry-Forum/dash.js)
 
 ### Contributing
 

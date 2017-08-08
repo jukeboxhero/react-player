@@ -51,9 +51,9 @@ export default class FilePlayer extends Base {
   load (url) {
     if (this.shouldUseHLS(url)) {
       loadSDK(HLS_SDK_URL, HLS_GLOBAL).then(Hls => {
-        this.hls = new Hls()
-        this.hls.loadSource(url)
-        this.hls.attachMedia(this.player)
+        const hls = new Hls()
+        hls.loadSource(url)
+        hls.attachMedia(this.player)
       })
     }
     if (this.shouldUseDASH(url)) {
@@ -64,20 +64,20 @@ export default class FilePlayer extends Base {
     }
   }
   play () {
-    this.player.play().catch(this.props.onError)
+    this.player.play()
   }
   pause () {
     this.player.pause()
   }
   stop () {
     this.player.removeAttribute('src')
-    if (this.hls) {
-      this.hls.detachMedia()
-    }
   }
-  seekTo (amount) {
-    const seconds = super.seekTo(amount)
-    this.player.currentTime = seconds
+  seekTo (fraction) {
+    if (fraction === 1) {
+      this.pause()
+    }
+    super.seekTo(fraction)
+    this.player.currentTime = this.getDuration() * fraction
   }
   setVolume (fraction) {
     this.player.volume = fraction
@@ -104,22 +104,19 @@ export default class FilePlayer extends Base {
     const { src, type } = source
     return <source key={src} src={src} type={type} />
   }
-  renderTrack = (track, index) => {
-    return <track key={index} {...track} />
-  }
   ref = player => {
     this.player = player
   }
   render () {
-    const { url, loop, controls, fileConfig, width, height } = this.props
+    const { url, loop, controls, fileConfig } = this.props
     const useAudio = AUDIO_EXTENSIONS.test(url) || fileConfig.forceAudio
     const useHLS = this.shouldUseHLS(url)
     const useDASH = this.shouldUseDASH(url)
     const Element = useAudio ? 'audio' : 'video'
     const src = url instanceof Array || useHLS || useDASH ? undefined : url
     const style = {
-      width: !width || width === 'auto' ? width : '100%',
-      height: !height || height === 'auto' ? height : '100%',
+      width: '100%',
+      height: '100%',
       display: url ? 'block' : 'none'
     }
     return (
@@ -133,9 +130,6 @@ export default class FilePlayer extends Base {
         {...fileConfig.attributes}>
         {url instanceof Array &&
           url.map(this.renderSource)
-        }
-        {fileConfig.tracks instanceof Array &&
-          fileConfig.tracks.map(this.renderTrack)
         }
       </Element>
     )

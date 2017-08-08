@@ -110,10 +110,10 @@ export default class YouTube extends Base {
     if (!document.body.contains(this.player.getIframe())) return
     this.player.stopVideo()
   }
-  seekTo (amount) {
-    const seconds = super.seekTo(amount)
+  seekTo (fraction) {
+    super.seekTo(fraction)
     if (!this.isReady || !this.player.seekTo) return
-    this.player.seekTo(seconds)
+    this.player.seekTo(this.getDuration() * fraction)
   }
   setVolume (fraction) {
     if (!this.isReady || !this.player.setVolume) return

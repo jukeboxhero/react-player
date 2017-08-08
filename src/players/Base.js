@@ -45,20 +45,14 @@ export default class Base extends Component {
   shouldComponentUpdate (nextProps) {
     return this.props.url !== nextProps.url
   }
-  seekTo (amount) {
+  seekTo (fraction) {
     // When seeking before player is ready, store value and seek later
-    if (!this.isReady && amount !== 0) {
-      this.seekOnPlay = amount
+    if (!this.isReady && fraction !== 0) {
+      this.seekOnPlay = fraction
       setTimeout(() => {
         this.seekOnPlay = null
       }, SEEK_ON_PLAY_EXPIRY)
     }
-    // Return the seconds to seek to
-    if (amount > 0 && amount < 1) {
-      // Convert fraction to seconds based on duration
-      return this.getDuration() * amount
-    }
-    return amount
   }
   onPlay = () => {
     const { volume, onStart, onPlay, onDuration, playbackRate } = this.props
